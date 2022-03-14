@@ -1,0 +1,4072 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Diablo2 Resurrected 2.4 PTR2 Wereform IAS Calculator</title>
+        <style>
+            .mainheading{
+                font-weight: bold;
+            }
+            .pagecenter{
+                width:75%;
+                max-width:1280px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .intro{
+                margin-bottom: 2em;
+            }
+            .mainform{
+                border: 1px solid black;
+                border-radius: 1em;
+                padding: 1em;
+            }
+            .sectionwrapper{
+                border: 1px solid black;
+                border-radius: 0.5em;
+                padding: 0.5em;
+                margin-bottom: 1em;
+            }
+            .heading{
+                font-weight: bold;
+                margin-bottom: 0px;
+            }
+            .spacer{
+                height: 2em;
+            }
+            .nopad{
+                width:100%;
+                margin:0;
+                padding:0;
+                border-collapse: collapse;
+            }
+            .nopad td, .nopad tr{
+                padding: 0;
+            }
+            .bigbutton{
+                font-weight: bold;
+                font-size: 200%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .buttonwrapper{
+                text-align: center;
+                margin-bottom: 1em;
+            }
+            div.settings {
+                display:grid;
+                grid-template-columns: max-content max-content;
+                grid-gap: 0.25em;
+                border: 1px solid black;
+                border-radius: 0.5em;
+                padding: 0.5em;
+            }
+            div.settings label {
+                text-align:right;
+            }
+            input[type=number] {
+                width: 5em;
+                text-align: center;
+            }
+            #weapon{
+                width: 15em;
+            }
+            .chartwrapper{
+                margin-bottom: 2em;
+            }
+            .fpachart{
+                border-collapse: collapse;
+                border-spacing: 0;
+                text-align: right;
+            }
+            .fpachart th, .fpachart td{
+                padding: 0.25em 0.5em;
+                border: 1px solid black;
+            }
+            .highlightedrow {
+                background-color: #AAFFAA;
+                font-weight: bold;
+            }
+        </style>
+        <script  type="text/javascript" >
+            
+            // Put all the constant data in associative arrays to make the code more readable
+            
+            const framedata = {
+                amazon: {
+                    wHTH: {
+                        startframe: 1,
+                        actionframes: [8],
+                        framesperdirection: 13,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 2,
+                        actionframes: [10],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 2,
+                        actionframes: [12],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 2,
+                        actionframes: [9],
+                        framesperdirection: 15,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 2,
+                        actionframes: [11],
+                        framesperdirection: 18,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 2,
+                        actionframes: [12],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [6],
+                        framesperdirection: 14,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    }
+                },
+                assassin: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [6],
+                        framesperdirection: 11,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 15,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 0,
+                        actionframes: [11],
+                        framesperdirection: 23,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 15,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 23,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 21,
+                        animationspeed: 256
+                    },
+                    wHT1: {
+                        startframe: 0,
+                        actionframes: [6],
+                        framesperdirection: 11,
+                        animationspeed: 208
+                    }
+                },
+                barbarian: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [6],
+                        framesperdirection: 12,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 18,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 15,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    },
+                    w1SS: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    }
+                },
+                druid: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 21,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 23,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 17,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    }
+                },
+                necromancer: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 15,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 0,
+                        actionframes: [11],
+                        framesperdirection: 23,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 24,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 0,
+                        actionframes: [11],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 18,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [11],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    }
+                },
+                paladin: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 14,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 15,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 18,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 17,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 18,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [8],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [10],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    }
+                },
+                sorceress: {
+                    wHTH: {
+                        startframe: 1,
+                        actionframes: [9],
+                        framesperdirection: 16,
+                        animationspeed: 256
+                    },
+                    w1HS: {
+                        startframe: 2,
+                        actionframes: [12],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    },
+                    w2HS: {
+                        startframe: 2,
+                        actionframes: [14],
+                        framesperdirection: 24,
+                        animationspeed: 256
+                    },
+                    w1HT: {
+                        startframe: 2,
+                        actionframes: [11],
+                        framesperdirection: 19,
+                        animationspeed: 256
+                    },
+                    w2HT: {
+                        startframe: 2,
+                        actionframes: [13],
+                        framesperdirection: 23,
+                        animationspeed: 256
+                    },
+                    wSTF: {
+                        startframe: 2,
+                        actionframes: [11],
+                        framesperdirection: 18,
+                        animationspeed: 256
+                    },
+                    wBOW: {
+                        startframe: 0,
+                        actionframes: [9],
+                        framesperdirection: 17,
+                        animationspeed: 256
+                    },
+                    wXBW: {
+                        startframe: 0,
+                        actionframes: [11],
+                        framesperdirection: 20,
+                        animationspeed: 256
+                    }
+                },
+            };
+            
+            
+            const skilldata ={
+                normalattack: {
+                    isrollbackskill: false,
+                    hitcount: 1,
+                    overrideframedata: false,
+                    sequencefactor: 0,
+                    skillfactor: 0
+                },
+                feralrage: {
+                    isrollbackskill: false,
+                    hitcount: 1,
+                    overrideframedata: false,
+                    sequencefactor: 0,
+                    skillfactor: 0
+                },
+                bite: {
+                    isrollbackskill: false,
+                    hitcount: 1,
+                    overrideframedata: true,
+                    // I'm ASSUMING this is the wereform S3 frame data used because the human forms don't have S3 data to borrow (or S3 doesn't mean "bite").
+                    framedata: {
+                        werewolf: {
+                            startframe: 0,
+                            actionframes: [6],
+                            framesperdirection: 10,
+                            animationspeed: 240
+                        },
+                        werebear: {
+                            startframe: 0,
+                            actionframes: [6],
+                            framesperdirection: 10,
+                            animationspeed: 208
+                        }
+                    },
+                    sequencefactor: 0,
+                    skillfactor: 0
+                },
+                fury: {
+                    isrollbackskill: true,
+                    rollbackamount: 70, // extracted skills.txt from PTR2 game data shows this is 70; patch notes are wrong.
+                    hitcount: 5,
+                    overrideframedata: false,
+                    sequencefactor: 0,
+                    skillfactor: 0
+                }
+                // TODO: Do all the skills in D2
+            };
+  
+  
+            const animationames = {
+                wHTH: "Unarmed",
+                w1HS: "1-Handed Swinging Weapon",
+                w2HS: "2-Handed Swinging Weapon (sword)",
+                wSTF: "2-Handed Swinging Weapon (staff/axe/polearm/hammer)",
+                w1HT: "1-Handed Thrusting Weapon",
+                w2HT: "2-Handed Thrusting Weapon",
+                wBOW: "Bow",
+                wXBW: "Crossbow",
+                wHT1: "Claws"
+                // TODO: dual wielding
+            };
+  
+            // TODO: Fill in isonehandsword and isjavelinorpolearm so weapon options for merc can be done
+            // (presently they are all set to false)
+  
+            const weaponlist = {
+                unarmed: {
+                    printname: "[unarmed]",
+                    wsm: 0,
+                    wclass: "wHTH",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                AncientAxe: {
+                    printname: "Ancient Axe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                AncientSword: {
+                    printname: "Ancient Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Arbalest: {
+                    printname: "Arbalest",
+                    wsm: -10,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ArchonStaff: {
+                    printname: "Archon Staff",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                AshwoodBow: {
+                    printname: "Ashwood Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Ataghan: {
+                    printname: "Ataghan",
+                    wsm: -20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Axe: {
+                    printname: "Axe",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BalancedAxe: {
+                    printname: "Balanced Axe",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BalancedKnife: {
+                    printname: "Balanced Knife",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Ballista: {
+                    printname: "Ballista",
+                    wsm: 10,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BalrogBlade: {
+                    printname: "Balrog Blade",
+                    wsm: 0,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BalrogSpear: {
+                    printname: "Balrog Spear",
+                    wsm: 10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BarbedClub: {
+                    printname: "Barbed Club",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Bardiche: {
+                    printname: "Bardiche",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BastardSword: {
+                    printname: "Bastard Sword",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleAxe: {
+                    printname: "Battle Axe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleCestus: {
+                    printname: "Battle Cestus",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleDart: {
+                    printname: "Battle Dart",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleHammer: {
+                    printname: "Battle Hammer",
+                    wsm: 20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleScythe: {
+                    printname: "Battle Scythe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleStaff: {
+                    printname: "Battle Staff",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BattleSword: {
+                    printname: "Battle Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BeardedAxe: {
+                    printname: "Bearded Axe",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BecdeCorbin: {
+                    printname: "Bec-de-Corbin",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BerserkerAxe: {
+                    printname: "Berserker Axe",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Bill: {
+                    printname: "Bill",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BladeBow: {
+                    printname: "Blade Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BladeTalons: {
+                    printname: "Blade Talons",
+                    wsm: -20,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Blade: {
+                    printname: "Blade",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BoneKnife: {
+                    printname: "Bone Knife",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BoneWand: {
+                    printname: "Bone Wand",
+                    wsm: -20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Brandistock: {
+                    printname: "Brandistock",
+                    wsm: -20,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BroadAxe: {
+                    printname: "Broad Axe",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BroadSword: {
+                    printname: "Broad Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                BurntWand: {
+                    printname: "Burnt Wand",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Caduceus: {
+                    printname: "Caduceus",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CedarBow: {
+                    printname: "Cedar Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CedarStaff: {
+                    printname: "Cedar Staff",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CeremonialBow: {
+                    printname: "Ceremonial Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CeremonialJavelin: {
+                    printname: "Ceremonial Javelin",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CeremonialPike: {
+                    printname: "Ceremonial Pike",
+                    wsm: 20,
+                    wclass: "w2HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CeremonialSpear: {
+                    printname: "Ceremonial Spear",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Cestus: {
+                    printname: "Cestus",
+                    wsm: 0,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ChampionAxe: {
+                    printname: "Champion Axe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ChampionSword: {
+                    printname: "Champion Sword",
+                    wsm: -10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ChuKoNu: {
+                    printname: "Chu-Ko-Nu",
+                    wsm: -60,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Cinquedeas: {
+                    printname: "Cinquedeas",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ClaspedOrb: {
+                    printname: "Clasped Orb",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Claws: {
+                    printname: "Claws",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Claymore: {
+                    printname: "Claymore",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Cleaver: {
+                    printname: "Cleaver",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CloudySphere: {
+                    printname: "Cloudy Sphere",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Club: {
+                    printname: "Club",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ColossusBlade: {
+                    printname: "Colossus Blade",
+                    wsm: 5,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ColossusCrossbow: {
+                    printname: "Colossus Crossbow",
+                    wsm: 10,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ColossusSword: {
+                    printname: "Colossus Sword",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ColossusVoulge: {
+                    printname: "Colossus Voulge",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CompositeBow: {
+                    printname: "Composite Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ConquestSword: {
+                    printname: "Conquest Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Crossbow: {
+                    printname: "Crossbow",
+                    wsm: 0,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Crowbill: {
+                    printname: "Crowbill",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CrusaderBow: {
+                    printname: "Crusader Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CrypticAxe: {
+                    printname: "Cryptic Axe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CrypticSword: {
+                    printname: "Cryptic Sword",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CrystalSword: {
+                    printname: "Crystal Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                CrystallineGlobe: {
+                    printname: "Crystalline Globe",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Cudgel: {
+                    printname: "Cudgel",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Cutlass: {
+                    printname: "Cutlass",
+                    wsm: -30,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DacianFalx: {
+                    printname: "Dacian Falx",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Dagger: {
+                    printname: "Dagger",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Decapitator: {
+                    printname: "Decapitator",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DemonCrossbow: {
+                    printname: "Demon Crossbow",
+                    wsm: -60,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DemonHeart: {
+                    printname: "Demon Heart",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DevilStar: {
+                    printname: "Devil Star",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DiamondBow: {
+                    printname: "Diamond Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DimensionalBlade: {
+                    printname: "Dimensional Blade",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DimensionalShard: {
+                    printname: "Dimensional Shard",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Dirk: {
+                    printname: "Dirk",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DivineScepter: {
+                    printname: "Divine Scepter",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DoubleAxe: {
+                    printname: "Double Axe",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                DoubleBow: {
+                    printname: "Double Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                EagleOrb: {
+                    printname: "Eagle Orb",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                EdgeBow: {
+                    printname: "Edge Bow",
+                    wsm: 5,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ElderStaff: {
+                    printname: "Elder Staff",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                EldritchOrb: {
+                    printname: "Eldritch Orb",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ElegantBlade: {
+                    printname: "Elegant Blade",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Espandon: {
+                    printname: "Espandon",
+                    wsm: 0,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                EttinAxe: {
+                    printname: "Ettin Axe",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ExecutionerSword: {
+                    printname: "Executioner Sword",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Falcata: {
+                    printname: "Falcata",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Falchion: {
+                    printname: "Falchion",
+                    wsm: 20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                FangedKnife: {
+                    printname: "Fanged Knife",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Fascia: {
+                    printname: "Fascia",
+                    wsm: 10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                FeralAxe: {
+                    printname: "Feral Axe",
+                    wsm: -15,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                FeralClaws: {
+                    printname: "Feral Claws",
+                    wsm: -20,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Flail: {
+                    printname: "Flail",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Flamberge: {
+                    printname: "Flamberge",
+                    wsm: -10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                FlangedMace: {
+                    printname: "Flanged Mace",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                FlyingAxe: {
+                    printname: "Flying Axe",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Francisca: {
+                    printname: "Francisca",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Fuscina: {
+                    printname: "Fuscina",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GhostGlaive: {
+                    printname: "Ghost Glaive",
+                    wsm: 20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GhostSpear: {
+                    printname: "Ghost Spear",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GhostWand: {
+                    printname: "Ghost Wand",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GiantAxe: {
+                    printname: "Giant Axe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GiantSword: {
+                    printname: "Giant Sword",
+                    wsm: 0,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GiantThresher: {
+                    printname: "Giant Thresher",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Gladius: {
+                    printname: "Gladius",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Glaive: {
+                    printname: "Glaive",
+                    wsm: 20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GloriousAxe: {
+                    printname: "Glorious Axe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GlowingOrb: {
+                    printname: "Glowing Orb",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GnarledStaff: {
+                    printname: "Gnarled Staff",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GorgonCrossbow: {
+                    printname: "Gorgon Crossbow",
+                    wsm: 0,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GothicAxe: {
+                    printname: "Gothic Axe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GothicBow: {
+                    printname: "Gothic Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GothicStaff: {
+                    printname: "Gothic Staff",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GothicSword: {
+                    printname: "Gothic Sword",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GrandMatronBow: {
+                    printname: "Grand Matron Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GrandScepter: {
+                    printname: "Grand Scepter",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GraveWand: {
+                    printname: "Grave Wand",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreatAxe: {
+                    printname: "Great Axe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreatBow: {
+                    printname: "Great Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreatMaul: {
+                    printname: "Great Maul",
+                    wsm: 20,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreatPilum: {
+                    printname: "Great Pilum",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreatPoleaxe: {
+                    printname: "Great Poleaxe",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreatSword: {
+                    printname: "Great Sword",
+                    wsm: 10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreaterClaws: {
+                    printname: "Greater Claws",
+                    wsm: -20,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GreaterTalons: {
+                    printname: "Greater Talons",
+                    wsm: -30,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GrimScythe: {
+                    printname: "Grim Scythe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                GrimWand: {
+                    printname: "Grim Wand",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Halberd: {
+                    printname: "Halberd",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HandAxe: {
+                    printname: "Hand Axe",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HandScythe: {
+                    printname: "Hand Scythe",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Harpoon: {
+                    printname: "Harpoon",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HatchetHands: {
+                    printname: "Hatchet Hands",
+                    wsm: 10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Hatchet: {
+                    printname: "Hatchet",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HeavenlyStone: {
+                    printname: "Heavenly Stone",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HeavyCrossbow: {
+                    printname: "Heavy Crossbow",
+                    wsm: 10,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HighlandBlade: {
+                    printname: "Highland Blade",
+                    wsm: -5,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HolyWaterSprinkler: {
+                    printname: "Holy Water Sprinkler",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HuntersBow: {
+                    printname: "Hunter's Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Hurlbat: {
+                    printname: "Hurlbat",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HydraBow: {
+                    printname: "Hydra Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HydraEdge: {
+                    printname: "Hydra Edge",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HyperionJavelin: {
+                    printname: "Hyperion Javelin",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                HyperionSpear: {
+                    printname: "Hyperion Spear",
+                    wsm: -10,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                JaggedStar: {
+                    printname: "Jagged Star",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                JaredsStone: {
+                    printname: "Jared's Stone",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Javelin: {
+                    printname: "Javelin",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                JoStaff: {
+                    printname: "Jo Staff",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Katar: {
+                    printname: "Katar",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Knout: {
+                    printname: "Knout",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Kris: {
+                    printname: "Kris",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Lance: {
+                    printname: "Lance",
+                    wsm: 20,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LargeAxe: {
+                    printname: "Large Axe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LargeSiegeBow: {
+                    printname: "Large Siege Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LegendSpike: {
+                    printname: "Legend Spike",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LegendSword: {
+                    printname: "Legend Sword",
+                    wsm: -15,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LegendaryMallet: {
+                    printname: "Legendary Mallet",
+                    wsm: 20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LichWand: {
+                    printname: "Lich Wand",
+                    wsm: -20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LightCrossbow: {
+                    printname: "Light Crossbow",
+                    wsm: -10,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LochaberAxe: {
+                    printname: "Lochaber Axe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LongBattleBow: {
+                    printname: "Long Battle Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LongBow: {
+                    printname: "Long Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LongStaff: {
+                    printname: "Long Staff",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LongSword: {
+                    printname: "Long Sword",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                LongWarBow: {
+                    printname: "Long War Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Mace: {
+                    printname: "Mace",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MaidenJavelin: {
+                    printname: "Maiden Javelin",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MaidenPike: {
+                    printname: "Maiden Pike",
+                    wsm: 10,
+                    wclass: "w2HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MaidenSpear: {
+                    printname: "Maiden Spear",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Mancatcher: {
+                    printname: "Mancatcher",
+                    wsm: -20,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MarteldeFer: {
+                    printname: "Martel de Fer",
+                    wsm: 20,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MatriarchalBow: {
+                    printname: "Matriarchal Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MatriarchalJavelin: {
+                    printname: "Matriarchal Javelin",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MatriarchalPike: {
+                    printname: "Matriarchal Pike",
+                    wsm: 20,
+                    wclass: "w2HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MatriarchalSpear: {
+                    printname: "Matriarchal Spear",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Maul: {
+                    printname: "Maul",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MightyScepter: {
+                    printname: "Mighty Scepter",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MilitaryAxe: {
+                    printname: "Military Axe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MilitaryPick: {
+                    printname: "Military Pick",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MithrilPoint: {
+                    printname: "Mithril Point",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MorningStar: {
+                    printname: "Morning Star",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                MythicalSword: {
+                    printname: "Mythical Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Naga: {
+                    printname: "Naga",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                OgreAxe: {
+                    printname: "Ogre Axe",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                OgreMaul: {
+                    printname: "Ogre Maul",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Partizan: {
+                    printname: "Partizan",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                PelletBow: {
+                    printname: "Pellet Bow",
+                    wsm: -10,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                PetrifiedWand: {
+                    printname: "Petrified Wand",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Phaseblade: {
+                    printname: "Phaseblade",
+                    wsm: -30,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Pike: {
+                    printname: "Pike",
+                    wsm: 20,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Pilum: {
+                    printname: "Pilum",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Poignard: {
+                    printname: "Poignard",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Poleaxe: {
+                    printname: "Poleaxe",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                PolishedWand: {
+                    printname: "Polished Wand",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Quarterstaff: {
+                    printname: "Quarterstaff",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Quhab: {
+                    printname: "Quhab",
+                    wsm: 0,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RazorBow: {
+                    printname: "Razor Bow",
+                    wsm: -10,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ReflexBow: {
+                    printname: "Reflex Bow",
+                    wsm: 10,
+                    wclass: "wBOW",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ReinforcedMace: {
+                    printname: "Reinforced Mace",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RepeatingCrossbow: {
+                    printname: "Repeating Crossbow",
+                    wsm: -40,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Rondel: {
+                    printname: "Rondel",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RuneBow: {
+                    printname: "Rune Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RuneScepter: {
+                    printname: "Rune Scepter",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RuneStaff: {
+                    printname: "Rune Staff",
+                    wsm: 20,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RuneSword: {
+                    printname: "Rune Sword",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                RunicTalons: {
+                    printname: "Runic Talons",
+                    wsm: -30,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Sabre: {
+                    printname: "Sabre",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SacredGlobe: {
+                    printname: "Sacred Globe",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Scepter: {
+                    printname: "Scepter",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Scimitar: {
+                    printname: "Scimitar",
+                    wsm: -20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ScissorsKatar: {
+                    printname: "Scissors Katar",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ScissorsQuhab: {
+                    printname: "Scissors Quhab",
+                    wsm: 0,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ScissorsSuwayyah: {
+                    printname: "Scissors Suwayyah",
+                    wsm: 0,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Scourge: {
+                    printname: "Scourge",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Scythe: {
+                    printname: "Scythe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SeraphRod: {
+                    printname: "Seraph Rod",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShadowBow: {
+                    printname: "Shadow Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Shamshir: {
+                    printname: "Shamshir",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Shillelagh: {
+                    printname: "Shillelagh",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortBattleBow: {
+                    printname: "Short Battle Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortBow: {
+                    printname: "Short Bow",
+                    wsm: 5,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortSiegeBow: {
+                    printname: "Short Siege Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortSpear: {
+                    printname: "Short Spear",
+                    wsm: 10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortStaff: {
+                    printname: "Short Staff",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortSword: {
+                    printname: "Short Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ShortWarBow: {
+                    printname: "Short War Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SiegeCrossbow: {
+                    printname: "Siege Crossbow",
+                    wsm: 0,
+                    wclass: "wXBW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SilverEdgedAxe: {
+                    printname: "Silver-edged Axe",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Simbilan: {
+                    printname: "Simbilan",
+                    wsm: 10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SmallCrescent: {
+                    printname: "Small Crescent",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SmokedSphere: {
+                    printname: "Smoked Sphere",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SparklingBall: {
+                    printname: "Sparkling Ball",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Spear: {
+                    printname: "Spear",
+                    wsm: -10,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Spetum: {
+                    printname: "Spetum",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Spiculum: {
+                    printname: "Spiculum",
+                    wsm: 20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SpiderBow: {
+                    printname: "Spider Bow",
+                    wsm: 5,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SpikedClub: {
+                    printname: "Spiked Club",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                StagBow: {
+                    printname: "Stag Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: true,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Stalagmite: {
+                    printname: "Stalagmite",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Stiletto: {
+                    printname: "Stiletto",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                StygianPike: {
+                    printname: "Stygian Pike",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                StygianPilum: {
+                    printname: "Stygian Pilum",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Suwayyah: {
+                    printname: "Suwayyah",
+                    wsm: 0,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                SwirlingCrystal: {
+                    printname: "Swirling Crystal",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Tabar: {
+                    printname: "Tabar",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Thresher: {
+                    printname: "Thresher",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ThrowingAxe: {
+                    printname: "Throwing Axe",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ThrowingKnife: {
+                    printname: "Throwing Knife",
+                    wsm: 0,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ThrowingSpear: {
+                    printname: "Throwing Spear",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                ThunderMaul: {
+                    printname: "Thunder Maul",
+                    wsm: 20,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Tomahawk: {
+                    printname: "Tomahawk",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                TombWand: {
+                    printname: "Tomb Wand",
+                    wsm: -20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Trident: {
+                    printname: "Trident",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Truncheon: {
+                    printname: "Truncheon",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Tulwar: {
+                    printname: "Tulwar",
+                    wsm: 20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                TuskSword: {
+                    printname: "Tusk Sword",
+                    wsm: 0,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                TwinAxe: {
+                    printname: "Twin Axe",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                TwoHandedSword: {
+                    printname: "Two-Handed Sword",
+                    wsm: 0,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                TyrantClub: {
+                    printname: "Tyrant Club",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                UnearthedWand: {
+                    printname: "Unearthed Wand",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                VortexOrb: {
+                    printname: "Vortex Orb",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: true,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Voulge: {
+                    printname: "Voulge",
+                    wsm: 0,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WalkingStick: {
+                    printname: "Walking Stick",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Wand: {
+                    printname: "Wand",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarAxe: {
+                    printname: "War Axe",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarClub: {
+                    printname: "War Club",
+                    wsm: 10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarDart: {
+                    printname: "War Dart",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarFist: {
+                    printname: "War Fist",
+                    wsm: 10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarFork: {
+                    printname: "War Fork",
+                    wsm: -20,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarHammer: {
+                    printname: "War Hammer",
+                    wsm: 20,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarJavelin: {
+                    printname: "War Javelin",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarPike: {
+                    printname: "War Pike",
+                    wsm: 20,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarScepter: {
+                    printname: "War Scepter",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarScythe: {
+                    printname: "War Scythe",
+                    wsm: -10,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarSpear: {
+                    printname: "War Spear",
+                    wsm: -10,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarSpike: {
+                    printname: "War Spike",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarStaff: {
+                    printname: "War Staff",
+                    wsm: 20,
+                    wclass: "wSTF",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WarSword: {
+                    printname: "War Sword",
+                    wsm: 0,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WardBow: {
+                    printname: "Ward Bow",
+                    wsm: 0,
+                    wclass: "wBOW",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WingedAxe: {
+                    printname: "Winged Axe",
+                    wsm: -10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WingedHarpoon: {
+                    printname: "Winged Harpoon",
+                    wsm: -10,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WingedKnife: {
+                    printname: "Winged Knife",
+                    wsm: -20,
+                    wclass: "w1HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WristBlade: {
+                    printname: "Wrist Blade",
+                    wsm: 0,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WristSpike: {
+                    printname: "Wrist Spike",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                WristSword: {
+                    printname: "Wrist Sword",
+                    wsm: -10,
+                    wclass: "wHT1",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Yari: {
+                    printname: "Yari",
+                    wsm: 0,
+                    wclass: "w2HT",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                YewWand: {
+                    printname: "Yew Wand",
+                    wsm: 10,
+                    wclass: "w1HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                },
+                Zweihander: {
+                    printname: "Zweihander",
+                    wsm: -10,
+                    wclass: "w2HS",
+                    zononly: false,
+                    isorb: false,
+                    isonehandsword: false,
+                    isjavelinorpolearm: false,
+                }
+            };
+
+            
+            // Everything that looks like a floor() in D2 is probably the result of C++ integer math.
+            // That means negative values should go up towards zero, but javascript's Math.floor() goes down towards negative infinity.
+            // Hence this function.
+            // (Likewise *256 and /256 are probably really <<8 and >>8
+            // Blizzard might even have a fixed-point type defined in their code.
+            // Other games from the mid-to-late 90s had that b/c floating point was too slow on some consumer hardware.)
+            function TruncateToInt(input){
+                return (input >= 0) ? Math.floor(input) : Math.ceil(input);
+            }
+  
+  
+            // skillias: total IAS from skills
+            // gearias: total IAS from gear (if dual weilding, exclude the weapon that's not performing this hit)
+            // wsm: The active weapon's WSM value
+            //      Complicated if dual weilding.
+            //      Traditionally was active_weapon_WSM - TruncateToInt((gloves_side_weapon_WSM + boots_side_weapon_WSM)/2) + boots_side_weapon_WSM
+            //      My *guess* is that 2.4PTR changes this to active_weapon_WSM - TruncateToInt((gloves_side_weapon_WSM + boots_side_weapon_WSM)/2) + inactive_weapon_WSM
+            // sequencefactor: -30 for sequence skills (Jab, Impale, Frenzy, Double Throw, Double Swing, Fists of Fire, Dragon Claw, Claws of Thunder, Blades of Ice); 0 for everything else
+            // skillfactor: 50 for Double Swing, 0 for everything else
+            // eiascap: tradionally 175, but is 250 for wereforms in 2.4PTR2
+            function ComputeEIAS(skillias, gearias, wsm, sequencefactor, skillfactor, eiascap){
+                var output = 100 + skillias + TruncateToInt((120 * gearias)/(120 + gearias)) - wsm + sequencefactor + skillfactor;
+                output = Math.min(output, eiascap);
+                output = Math.max(output, 15);
+                return output;
+            }
+            
+            /*
+            This is the main FPA calculating function!
+            
+            Instead of trying to derive formulae, I'm just going to simulate the animation process
+            based on descriptions of reverse engineering the machine code via debugger.
+            This makes for MUCH more readable code than formula-based IAS calculators,
+            and also avoids the problems of potentially screwing up edge cases in deriving the formulae.
+            
+            Basic Algorithm:
+                1. Increase counter by a speed-dependent increment.
+                2, Check if counter >= animation length; If so, abort and instead show first frame of next animation.
+                3. Get frame number to display.
+                4. Check if we reached (or skipped over) an action frame; If so, process it and do rollback, etc., as appropriate.
+                5. Loop to 1.
+            
+            Sources & Notes:
+            Here are major sources I could find describing the animation loop
+            1. This post by jrichard
+                https://www.diabloii.net/forums/threads/since-the-kick-calculations-are-off-someone-please-help-with-this-question.222223/post-2267201
+                * Easy to read.
+                * Note that he's wrong about not being able to skip over the action frame. See Source #3.
+                    Actually, I think this might have just been an unclear comment on how formulae can be wrong because they don't consider *which* frame gets skipped.
+                    FYI: Dragon Talon frames per direction 13, action frame 4, animationspeed 256, rollback 100.
+            2. This post by TitanSeal
+                https://planetdiablo.eu/forum/threads/faq-bewegungs-und-animationsgeschwindigkeiten-teil-2.1221988/#post-17669550
+                * Requires German reading ability or Google Translate.
+                * Also explains the mystery of Feral Rage:
+                    If the attack hits at the action frame, then the increment value is doubled for the remainder of the skill.
+            3. This post by Myrdinn
+                https://www.theamazonbasin.com/forums/index.php?/forums/topic/90231-amazon-zeal-attack-speed/
+                * Very valuable since it's basically annotated debugger output.
+                * Therefore probably also the most authoritative.
+                * Painfully hard to understand. The English is awful. So is the lack of formatting.
+                * Note that he admits all the way down in the description for Tick 17 that he's been fibbing about the first line of the loop; it actually checks the counter's value after it's been incremented, not before. (I have no idea why he did this. It makes it even harder to follow.)
+                * Note that the second counter for tracking which frames have been seen starts at 0 even if startingframe isn't 0. (Harmless bug by Blizzard.)
+            4. This post by Hammerman (quoted by onderduiker)
+                https://www.diabloii.net/forums/threads/potential-calculator-inaccuracy-for-frenzy-attack-speed-if.740663/post-7403369
+                also here:
+                https://www.theamazonbasin.com/forums/index.php?/forums/topic/119196-calculator-inaccuracy-for-frenzy-attack-speed/
+                * Unlike the other sources, this comment suggests the counter is incremented at the bottom of the loop.
+                I have to admit that this is intuitively appealing:
+                Why make frame000 only visible if your attack speed is slowed below normal?
+                But I have to reject it because every other source, including the one that's basically debugger output, says otherwise.
+                * Note that this makes the example wrong :(
+                * Explains how Frenzy works:
+                    * 17 framesperdirection, action frames at 4 and 9
+                    * If the attack the first action frame hits and is not blocked, then
+                        increment is reclaculated using new skillIAS value if Frenzy gained a charge level
+                        secondary weapon will be used for next hit check
+                    * At the second action frame, the increment is totally recalculated
+                        If this attack hit, skillIAS may again change.
+                        The weapon that was used for the hit check will be used.
+                        So, if the first attack hits, the primary weapon is used for frames 0-9 (changing the skillIAS after frame 4),
+                        and the secondary weapon is used for frames 10-16 (also changing skillIAS after frame 9).
+                        If the first attack misses/is blocked, the the primary weapon is used throughout.
+            5. This post by Fuzzier includes comprehensible pseudo-code for rollback using the ASM in source#2.
+                https://www.theamazonbasin.com/forums/index.php?/forums/topic/107343-rollback/
+                
+            Framesperdirection, startframe, action frames, and animation speed are all found in animdata.d2.
+            Unless it's a sequence skill; then they're hardcoded in "sequence tables."
+
+            random notes: barb 2nd swing is framesperdirection 12, and action 7 or 8
+            double trhough whole sequenc eis 12
+            
+            dual weild wolfbarb explaind
+            https://www.theamazonbasin.com/forums/index.php?/forums/topic/123238-dual-wield-shifter-barb-question/#comment-1534433
+            use averaged wsm (actually was primary + secondary - trunc(average), but maybe  change din 2.4PTR)
+            only rprimary weapon is used
+            bug for normal attack executes both animations, but doesn't hit anything with the second
+            
+            */
+            function CalculateFPA(skillname, morph, startframe, actionframes, framesperdirection, animationspeed, cappedeias){
+                
+                // set some variables based on the specific skill
+                var hitcount = skilldata[skillname]["hitcount"];
+                var isrollbackskill = skilldata[skillname]["isrollbackskill"];
+                var rollbackamount = (isrollbackskill) ? skilldata[skillname]["rollbackamount"] : 100;
+                var isferalrage = (skillname == "feralrage") ? true : false;
+                if (skilldata[skillname]["overrideframedata"]){
+                    //alert(skilldata[skillname]["framedata"]);
+                    startframe = skilldata[skillname]["framedata"][morph]["startframe"];
+                    actionframes = skilldata[skillname]["framedata"][morph]["actionframes"];
+                    framesperdirection = skilldata[skillname]["framedata"][morph]["framesperdirection"];
+                    animationspeed = skilldata[skillname]["framedata"][morph]["animationspeed"];
+                }
+                
+                var counter = startframe * 256;
+                var actionframecheckcounter = 0;
+                var actionframeflag = false;
+                var ticks = 0;
+                var maxcounter = framesperdirection * 256;
+                var increment = TruncateToInt((animationspeed * cappedeias)/100);
+                var prevticks=[0];
+                var output=[];
+                
+                while (true){
+                    
+                    ticks++;
+                    
+                    counter += increment;
+                    if (counter >= maxcounter){
+                        ticks--; // abort and load the first frame of next animation instead
+                        break;
+                    }
+                    
+                    currentframe = TruncateToInt(counter/256);
+                    
+                    // advance actionframecheckcounter to the current frame and see if we hit an action frame
+                    while (true){
+                        actionframecheckcounter++;
+                        for (var i=0; i<actionframes.length; i++){
+                            if (actionframecheckcounter < actionframes[i]){
+                                break;
+                            }
+                            if (actionframecheckcounter == actionframes[i]){
+                                actionframeflag = true;
+                                break;
+                            }
+                        }
+                        if (actionframecheckcounter >= currentframe){
+                            break;
+                        }
+                        
+                    }
+                    
+                    // do things if we hit an action frame
+                    if (actionframeflag){
+                        actionframeflag = false;
+                        
+                        // if this is a multi-hit skill and this is not the last hit, save fpa to output
+                        if (    (isrollbackskill && (hitcount > 1)) ||
+                                ((actionframes.length > 1) && (currentframe < actionframes[actionframes.length-1]))
+                        ){
+                            output.push(ticks - prevticks[prevticks.length -1]);
+                            prevticks.push(ticks);
+                        }
+                        
+                        // do feral rage funny business
+                        if (isferalrage){
+                            increment *= 2;
+                        }
+                        
+                        // do rollback
+                        if (isrollbackskill && (hitcount > 1)){
+                            newstartframe = TruncateToInt((currentframe * (100 - rollbackamount) ) / 100);
+                            counter = newstartframe * 256;
+                            actionframecheckcounter = newstartframe;
+                            hitcount--;
+                        }
+                    }     
+                    
+                }
+
+                // save FPA for final hit to output
+                output.push(ticks - prevticks[prevticks.length -1]);
+                
+                return output;
+            }
+            
+            
+            function CalculateSingleTable(tablebodyelement, skillname, morph, onweaponIAS, offweaponIAS, totalskillIAS, wsm, EIAScap, startframe, actionframes, framesperdirection, animationspeed){
+                var tempIAS = 0;
+                var lastfpa = -1;
+                var currentrow = -1;
+                var done = false;
+                var highlightdone = false;
+                while (!done){
+                    // assume 2000 gear IAS is impossible so we don't loop forever
+                    if (tempIAS > 2000){
+                        done = true;
+                    }
+                    var localtotalgearIAS = onweaponIAS + tempIAS;
+                    eias = ComputeEIAS(totalskillIAS, localtotalgearIAS, wsm, skilldata[skillname]["sequencefactor"], skilldata[skillname]["skillfactor"], EIAScap);
+                    if (eias >= EIAScap){
+                        done = true;
+                    }
+                    var fpa = CalculateFPA(skillname, morph, startframe, actionframes, framesperdirection, animationspeed, eias);                    
+                    if (!ArrayEquals(fpa, lastfpa)){
+                        var newrow = document.createElement('tr');
+                        var leftcell = document.createElement('td');
+                        leftcell.innerHTML = tempIAS;
+                        newrow.appendChild(leftcell);
+                        var middlecell = document.createElement('td');
+                        middlecell.innerHTML = eias - 100;
+                        newrow.appendChild(middlecell);
+                        var rightcell = document.createElement('td');
+                        if (skilldata[skillname]["isrollbackskill"]){
+                            rightcell.innerHTML = PrettyPrintFPAArray(fpa);
+                        }
+                        else {
+                            rightcell.innerHTML = fpa;
+                        }
+                        newrow.appendChild(rightcell);
+                        tablebodyelement.appendChild(newrow);
+                        lastfpa = fpa;
+                        currentrow = newrow;
+                    }
+                    if ((offweaponIAS == tempIAS) || (done && !highlightdone)){
+                        currentrow.classList.add("highlightedrow");
+                        highlightdone = true;
+                    }
+                    tempIAS++;
+                }
+            }
+            
+            
+            function RecalculateTables(){
+                if (BlankInputsExist()){
+                    return;
+                }
+                if (CorrectNegativeInputs()){
+                    return;
+                }
+                
+                // collect input
+                var playerclass = GetPlayerClass();
+                var playermorph = GetPlayerMorph();
+                var werewolflevel = GetWerewolfLevel();
+                var maullevel = GetMaulLevel();
+                var maulcharges = GetMaulCharges();
+                var fanaticismlevel = GetFanaticismLevel();
+                var burstofspeedlevel = GetBurstOfSpeedLevel();
+                var weapon = GetWeapon();
+                var onweaponIAS = GetOnWeaponIAS();
+                var offweaponIAS = GetOffWeaponIAS();
+                
+                // derive ias from skill levels
+                var werewolfIAS = 0;
+                if (werewolflevel > 0){
+                    werewolfIAS =  Math.min(80, 10 + TruncateToInt(70 * TruncateToInt( (110*werewolflevel) / (werewolflevel+6) ) / 100));
+                }
+                var maulIAS = 3 * maulcharges;
+                var fanaticismIAS = 0;
+                if (fanaticismlevel > 0){
+                    fanaticismIAS = Math.min(40, 10 + TruncateToInt(30 * TruncateToInt( (110*fanaticismlevel) / (fanaticismlevel+6) ) / 100));
+                }
+                var burstofspeedIAS = 0;
+                if (burstofspeedlevel > 0){
+                    burstofspeedIAS = Math.min(60, 15 + TruncateToInt(45 * TruncateToInt( (110*burstofspeedlevel) / (burstofspeedlevel+6) ) / 100));
+                }
+                var totalskillIAS = werewolfIAS + maulIAS + fanaticismIAS + burstofspeedIAS;
+                var totalgearIAS = onweaponIAS + offweaponIAS;
+                
+                // get weapon stats
+                var wclass = weaponlist[weapon]["wclass"];
+                //alert(wclass);
+                var wsm = weaponlist[weapon]["wsm"];
+                
+                // get frame data
+                var startframe = framedata[playerclass][wclass]["startframe"];
+                var actionframes = framedata[playerclass][wclass]["actionframes"];
+                var framesperdirection = framedata[playerclass][wclass]["framesperdirection"];
+                var animationspeed = framedata[playerclass][wclass]["animationspeed"];
+                
+                // new EIAS cap for wereforms
+                var EIAScap = 175;
+                if ((playermorph == "werewolf") || (playermorph == "werebear")){
+                    EIAScap = 250;
+                }
+                
+                // compute EIAS for display
+                // (don't use this value, since it might change if the skill has a bonus/penalty)
+                var displayEIAS = ComputeEIAS(totalskillIAS, totalgearIAS, wsm, 0, 0, EIAScap) - 100;
+                document.getElementById('displayeias').value = displayEIAS;
+                
+                // get dom elements to manipulate
+                var normalattackchartelement = document.getElementById('normalattackchart');
+                var normalattackchartbodyelement = document.getElementById('normalattackchartbody');
+                var furychartelement = document.getElementById('furychart');
+                var furychartbodyelement = document.getElementById('furychartbody');
+                var feralragechartelement = document.getElementById('feralragechart');
+                var feralragechartbodyelement = document.getElementById('feralragechartbody');
+                var bitechartelement = document.getElementById('bitechart');
+                var bitechartbodyelement = document.getElementById('bitechartbody');
+                
+                var fireclawslabelelement = document.getElementById('fireclawslabel');
+                var maullabelelement = document.getElementById('maullabel');
+                var rabieslabelelement = document.getElementById('rabieslabel');
+                
+                var dualwieldnormalattackwarningelement = document.getElementById('dualwieldnormalattackwarning');
+                var dualwieldferalragewarningelement = document.getElementById('dualwieldferalragewarning');
+                
+                // clean out the tables
+                
+                EmptyTable(normalattackchartbodyelement);
+                EmptyTable(furychartbodyelement);
+                EmptyTable(feralragechartbodyelement);
+                EmptyTable(bitechartbodyelement);
+                
+                // compute normal attack
+                CalculateSingleTable(normalattackchartbodyelement, "normalattack", playermorph, onweaponIAS, offweaponIAS, totalskillIAS, wsm, EIAScap, startframe, actionframes, framesperdirection, animationspeed);
+        
+                if ((playermorph == "werewolf") || (playermorph == "werebear")){
+                    fireclawslabelelement.style.display = "inline";
+                }
+                else {
+                    fireclawslabelelement.style.display = "none";
+                }
+                if (playermorph == "werebear"){
+                    maullabelelement.style.display = "inline";
+                }
+                else {
+                    maullabelelement.style.display = "none";
+                }
+              
+                if ((playerclass == "barbarian") || (playerclass == "assassin")){
+                    dualwieldnormalattackwarningelement.style.display = "inline";
+                }
+                else {
+                    dualwieldnormalattackwarningelement.style.display = "none";
+                }
+              
+                // compute Feral Rage if a werewolf
+                if (playermorph == "werewolf"){
+                    
+                    feralragechartelement.style.display = "block";
+                    CalculateSingleTable(feralragechartbodyelement, "feralrage", playermorph, onweaponIAS, offweaponIAS, totalskillIAS, wsm, EIAScap, startframe, actionframes, framesperdirection, animationspeed);
+                    
+                    if ((playerclass == "barbarian") || (playerclass == "assassin")){
+                        dualwieldferalragewarningelement.style.display = "inline";
+                    }
+                    else {
+                        dualwieldferalragewarningelement.style.display = "none";
+                    }
+                    
+                }
+                else {
+                    feralragechartelement.style.display = "none";
+                }
+                    
+                // compute Fury if a druid and a werewolf
+                if ((playerclass == "druid") && (playermorph == "werewolf")){
+                    furychartelement.style.display = "block";
+                    CalculateSingleTable(furychartbodyelement, "fury", playermorph, onweaponIAS, offweaponIAS, totalskillIAS, wsm, EIAScap, startframe, actionframes, framesperdirection, animationspeed);
+                    
+                }
+                else {
+                    furychartelement.style.display = "none";
+                }
+                
+                // compute bite attacks if a druid
+                if ((playerclass == "druid") && ((playermorph == "werewolf") || (playermorph == "werebear"))){
+                    bitechartelement.style.display = "block";
+                    CalculateSingleTable(bitechartbodyelement, "bite", playermorph, onweaponIAS, offweaponIAS, totalskillIAS, wsm, EIAScap, startframe, actionframes, framesperdirection, animationspeed);
+                    
+                    if (playermorph == "werewolf"){
+                        rabieslabelelement.style.display = "inline";
+                    }
+                    else {
+                        rabieslabelelement.style.display = "none";
+                    }
+                    
+                }
+                else {
+                    bitechartelement.style.display = "none";
+                }
+                
+                
+                
+                
+            }
+            
+            function ArrayEquals(array1, array2){
+                if (!array1){
+                    return false;
+                }
+                if (!array2){
+                    return false;
+                }
+                if (array1.length != array2.length){
+                    return false;
+                }
+                for (var i=0; i<array1.length; i++){
+                    if (array1[i] != array2[i]){
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            function ArraySum(array1){
+                var output = 0;
+                for (var i=0; i<array1.length; i++){
+                    output += array1[i];
+                }
+                return output;
+            }
+            
+            function PrettyPrintFPAArray(array1){
+                var output = "";
+                for (var i=0; i<array1.length; i++){
+                    output += array1[i];
+                    if (i+1 < array1.length){
+                        output += "/"
+                    }
+                }
+                output += " (" + ArraySum(array1) + ")";
+                return output;
+            }
+            
+            function GetPlayerClass(){
+                var select = document.getElementById('playerclass');
+                var value = select.options[select.selectedIndex].value;
+                return value;
+            }
+            
+            function GetPlayerMorph(){
+                var select = document.getElementById('playermorph');
+                var value = select.options[select.selectedIndex].value;
+                return value;
+            }
+            
+            function GetWerewolfLevel(){
+                return Number(document.getElementById('werewolflevel').value);
+            }
+            
+            function GetMaulLevel(){
+                return Number(document.getElementById('maullevel').value);
+            }
+            
+            function GetMaulCharges(){
+                return Number(document.getElementById('maulcharges').value);
+            }
+            
+            function GetMaulMaxCharges(){
+                return Number(document.getElementById('maulmaxcharges').value);
+            }
+            
+            function GetFanaticismLevel(){
+                return Number(document.getElementById('fanaticismlevel').value);
+            }
+            
+            function GetBurstOfSpeedLevel(){
+                return Number(document.getElementById('burstofspeedlevel').value);
+            }
+            
+            function GetWeapon(){
+                var select = document.getElementById('weapon');
+                var value = select.options[select.selectedIndex].value;
+                return value;
+            }
+            
+            function GetOnWeaponIAS(){
+                return Number(document.getElementById('weaponIAS').value);
+            }
+            
+            function GetOffWeaponIAS(){
+                return Number(document.getElementById('nonweaponIAS').value);
+            }
+            
+            
+            function UpdateAll(){
+                if (BlankInputsExist()){
+                   return;
+                }
+                if (CorrectNegativeInputs()){
+                    return;
+                }
+                UpdateUI();
+                RecalculateTables();
+            }
+            
+            function UpdateUI(){
+                if (BlankInputsExist()){
+                    return;
+                }
+                if (CorrectNegativeInputs()){
+                    return;
+                }
+                UpdateMorphUI();
+                UpdateWerewolfUI();
+                UpdateWerebearUI(false);
+                UpdateBurstOfSpeedUI();
+                UpdateWeaponListUI();
+                UpdateWeaponDetailsUI();
+                //alert("done");
+            }
+            
+            function RemoveOptions(selectElement) {
+                var i, L = selectElement.options.length - 1;
+                for(i = L; i >= 0; i--) {
+                    selectElement.remove(i);
+                }
+            }
+            
+            function EmptyTable(tablebodyelement){
+                while (tablebodyelement.firstChild){
+                    tablebodyelement.removeChild(tablebodyelement.firstChild);
+                }
+            }
+            
+            function UpdateMorphUI(){
+                var oldmorph = GetPlayerMorph();
+                var morphelement = document.getElementById('playermorph');
+                RemoveOptions(morphelement);
+                var newelement = document.createElement("option");
+                newelement.textContent = "Human";
+                newelement.value = "human";
+                morphelement.appendChild(newelement);
+                var playerclass = GetPlayerClass();
+                if ((playerclass == "druid") || (playerclass == "barbarian")){
+                    newelement = document.createElement("option");
+                    newelement.textContent = "Werewolf";
+                    newelement.value = "werewolf";
+                    morphelement.appendChild(newelement);
+                }
+                newelement = document.createElement("option");
+                newelement.textContent = "Werebear";
+                newelement.value = "werebear";
+                morphelement.appendChild(newelement);
+                for(var i = 0; i < morphelement.options.length; i++){
+                    if(morphelement.options[i].value == oldmorph){
+                        morphelement.options[i].selected = true;
+                    }
+                }
+            }
+            
+            function UpdateWerewolfUI(){
+                var morph = GetPlayerMorph();
+                var wolflevelelement = document.getElementById('werewolflevel');
+                if (morph == 'werewolf'){
+                    wolflevelelement.disabled = false;
+                }
+                else {
+                    wolflevelelement.value = 0;
+                    wolflevelelement.disabled = true;
+                }
+            }
+            
+            function UpdateWerebearUI(maxout){
+                var morph = GetPlayerMorph();
+                var pclass = GetPlayerClass();
+                var maullevelelement = document.getElementById('maullevel');
+                var maulchargeelement = document.getElementById('maulcharges');
+                var maulmaxchargeelement = document.getElementById('maulmaxcharges');
+                var newbear = maullevelelement.disabled;
+                if ((morph == 'werebear') && (pclass == "druid")){
+                    maullevelelement.disabled = false;
+                    maulchargeelement.disabled = false;
+                    var maxcharges = TruncateToInt(GetMaulLevel()/2)+3;
+                    maulmaxchargeelement.value = maxcharges;
+                    if (newbear || maxout || (GetMaulCharges() > maxcharges)){
+                        maulchargeelement.value = maxcharges;
+                    }
+                    if (GetMaulCharges() < 0){
+                        maulchargeelement.value = 0;
+                    }
+                }
+                else {
+                    maullevelelement.value = 0;
+                    maulchargeelement.value = 0;
+                    maulmaxchargeelement.value = 0;
+                    maullevelelement.disabled = true;
+                    maulchargeelement.disabled = true;
+                }
+            }
+            
+            function UpdateBurstOfSpeedUI(){
+                var playerclass = GetPlayerClass();
+                var boslevelelement = document.getElementById('burstofspeedlevel');
+                if (playerclass == 'assassin'){
+                    boslevelelement.disabled = false;
+                }
+                else {
+                    boslevelelement.value = 0;
+                    boslevelelement.disabled = true;
+                }
+            }
+        
+            
+            function UpdateWeaponListUI(){
+                var oldweapon = GetWeapon();
+                var weaponelement = document.getElementById('weapon');
+                RemoveOptions(weaponelement);
+                var playerclass = GetPlayerClass();
+                //alert(weaponlist);
+                for (var key in weaponlist) {
+                    if (
+                        ((playerclass == "assassin") || (weaponlist[key]["wclass"] != "wHT1")) &&
+                        ((playerclass == "amazon") || !weaponlist[key]["zononly"]) &&
+                        ((playerclass == "sorceress") || !weaponlist[key]["isorb"])
+                        // TODO add logic for mercs
+                    ){
+                        var newelement = document.createElement("option");
+                        newelement.textContent = weaponlist[key]["printname"];
+                        newelement.value = key;
+                        weaponelement.appendChild(newelement);
+                    }
+                }
+                for (var i = 0; i < weaponelement.options.length; i++){
+                    if(weaponelement.options[i].value == oldweapon){
+                        weaponelement.options[i].selected = true;
+                    }
+                }
+            }
+            
+            function UpdateWeaponDetailsUI(){
+                var weapon = GetWeapon();
+                var wclasselement = document.getElementById('wclass');
+                var wsmelement = document.getElementById('wsm');
+                var onweaponiaselement = document.getElementById('weaponIAS');
+                wclasselement.value = animationames[weaponlist[weapon]["wclass"]];
+                wsmelement.value = weaponlist[weapon]["wsm"];
+                if (weapon == "unarmed"){
+                    onweaponiaselement.value = 0;
+                    onweaponiaselement.disabled = true;
+                }
+                else {
+                    onweaponiaselement.disabled = false;
+                }
+            }
+            
+            
+            function MaulChanged(){
+                if (BlankInputsExist()){
+                    return;
+                }
+                var charges = GetMaulCharges();
+                var maxcharges = GetMaulMaxCharges();
+                if (charges == maxcharges){
+                    UpdateWerebearUI(true);
+                }
+                else {
+                    UpdateWerebearUI(false);
+                }
+                RecalculateTables();
+            }
+            
+            function WeaponChanged(){
+                if (BlankInputsExist()){
+                    return;
+                }
+                UpdateWeaponDetailsUI();
+                RecalculateTables();
+            }
+            
+            
+            function BlankInputsExist(){
+                
+                var testme = GetWerewolfLevel();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                testme = GetMaulLevel();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                testme = GetMaulCharges();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                testme = GetFanaticismLevel();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                testme = GetBurstOfSpeedLevel();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                testme = GetOnWeaponIAS();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                testme = GetOffWeaponIAS();
+                if (Number.isNaN(testme)){
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            function CorrectNegativeInputs(){
+                if (GetWerewolfLevel() < 0){
+                    document.getElementById('werewolflevel').value = 0;
+                    return true;
+                }
+                if (GetMaulLevel() < 0){
+                    document.getElementById('maullevel').value = 0;
+                    UpdateWerebearUI(false);
+                    return true;
+                }
+                if (GetMaulCharges() < 0){
+                    document.getElementById('maulcharges').value = 0;
+                    return true;
+                }
+                if (GetFanaticismLevel() < 0){
+                    document.getElementById('fanaticismlevel').value = 0;
+                    return true;
+                }
+                if (GetBurstOfSpeedLevel() < 0){
+                    document.getElementById('burstofspeedlevel').value = 0;
+                    return true;
+                }
+                if (GetOnWeaponIAS() < 0){
+                    document.getElementById('weaponIAS').value = 0;
+                    return true;
+                }
+                if (GetOffWeaponIAS() < 0){
+                    document.getElementById('nonweaponIAS').value = 0;
+                    return true;
+                }
+                return false;
+            }
+            
+
+            
+            
+        </script>
+    </head>
+    <body onload="UpdateAll();">
+       <div class="pagecenter">
+            <h1 class="mainheading">D2R 2.4 PTR2 Wereform IAS Calculator</h1>
+            <form class="mainform">
+           
+                    
+                    <div class="heading">Player</div>
+                    <div class="settings">
+                        <label for="playerclass">Class:</label>
+                        <select name="playerclass" id="playerclass" onchange="UpdateAll();">
+                            <option value="amazon">Amazon</option>
+                            <option value="assassin">Assassin</option>
+                            <option value="barbarian">Barbarian</option>
+                            <option value="druid" selected="selected">Druid</option>
+                            <option value="necromancer">Necromancer</option>
+                            <option value="paladin">Paladin</option>
+                            <option value="sorceress">Sorceress</option>
+                        </select>
+                        
+                        <label for="playermorph">Morph:</label>
+                        <select name="playermorph" id="playermorph" onchange="UpdateAll();">
+                            <option value="human">Human</option>
+                            <option value="werewolf" selected="selected">Werewolf</option>
+                            <option value="werebear">Werebear</option>
+                        </select>
+                    </div>
+                    
+                    <div class="spacer"></div>
+                    
+                    <div class="heading">Skill IAS</div>
+                    <div class="settings">
+                        <label for="werewolflevel">Werewolf Level:</label>
+                        <input type="number" id="werewolflevel" name="werewolflevel" value="0" min="0" oninput="RecalculateTables();">
+                        <label for="maullevel">Maul Level:</label>
+                        <input type="number" id="maullevel" name="maullevel" value="0" min="0" oninput="MaulChanged();">
+                        <label for="maulcharges">Maul Charges:</label>
+                        <span>
+                            <input type="number" id="maulcharges" name="maulcharges" value="0" min="0" oninput="MaulChanged();"> of <output id="maulmaxcharges" name="maulmaxcharges">0</output> max charges
+                        </span>
+                        <label for="fanaticismlevel">Fanaticism Level:</label>
+                        <input type="number" id="fanaticismlevel" name="fanaticismlevel" value="0" min="0" oninput="RecalculateTables();">
+                        <label for="burstofspeedlevel">Burst of Speed Level:</label>
+                        <input type="number" id="burstofspeedlevel" name="burstofspeedlevel" value="0" min="0" oninput="RecalculateTables();">
+                        <!-- TODO: Frenzy, Holy Freeze, Decrepify, chill -->
+                    </div>
+                    
+                    <div class="spacer"></div>
+                    
+                    <div class="heading">Weapon</div>
+                    <div class="settings">
+                        <label for="weapon">Weapon:</label>
+                        <select name="weapon" id="weapon" onchange="WeaponChanged();">
+                            <option value="unarmed" selected="selected">[unarmed]</option>
+                        </select>
+                        <label for="wclass">Weapon Class:</label>
+                        <output id="wclass" name="wclass">Unarmed</output>
+                        <label for="wsm">Base Speed:</label>
+                        <output id="wsm" name="wsm">0</output>
+                    </div>
+                    
+                    <div class="spacer"></div>
+                    
+                    <div class="heading">Gear IAS</div>
+                    <div class="settings">
+                        <label for="weaponIAS">On-Weapon IAS:</label>
+                        <span><input type="number" id="weaponIAS" name="weaponIAS" value="0" min="0" oninput="RecalculateTables();">
+                    (enter integer value &mdash; e.g., 25 for "25% IAS")</span>
+                        <label for="nonweaponIAS">Off-Weapon IAS:</label>
+                        <span><input type="number" id="nonweaponIAS" name="nonweaponIAS" value="0" min="0" oninput="RecalculateTables();">
+                        (enter integer value &mdash; e.g., 25 for "25% IAS")</span>
+                    </div>
+
+            </form>
+            <div class="spacer"></div>
+            <div class="sectionwrapper">
+                <div class="heading">Output</div>
+                <label for="displayeias">EIAS:</label>
+                <output id="displayeias" name="displayeias"></output>
+                <div class="spacer"></div>
+                <div id="normalattackchart" class="chartwrapper">
+                    Normal Attack<span id="fireclawslabel"> / Fire Claws</span><span id="maullabel"> / Maul</span>:<span id="dualwieldnormalattackwarning"><br>(Warning: Wereform normal attacks are totally bugged while dual weilding. After one successful attack, <em>every</em> attack will miss until you change weapons, exit wereform, or return to town.)</span>
+                    <table class="fpachart">
+                        <thead>
+                            <tr>
+                                <th>Off-Weapon IAS</th>
+                                <th>EIAS</th>
+                                <th>Frames Per Attack</th>
+                            </tr>
+                        </thead>
+                        <tbody id="normalattackchartbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="feralragechart" class="chartwrapper">
+                    Feral Rage:<br>
+                    (note: Feral Rage uses the normal attack's FPA if it misses)<span id="dualwieldferalragewarning"><br>(note: When dual wielding, the secondary weapon is not used <em>at all</em>. It never strikes and has no effect on attack speed.)</span>
+                    <table class="fpachart">
+                        <thead>
+                            <tr>
+                                <th>Off-Weapon IAS</th>
+                                <th>EIAS</th>
+                                <th>Frames Per Attack</th>
+                            </tr>
+                        </thead>
+                        <tbody id="feralragechartbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="furychart" class="chartwrapper">
+                    Fury:
+                    <table class="fpachart">
+                        <thead>
+                            <tr>
+                                <th>Off-Weapon IAS</th>
+                                <th>EIAS</th>
+                                <th>Frames Per Attack</th>
+                            </tr>
+                        </thead>
+                        <tbody id="furychartbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="bitechart" class="chartwrapper">
+                    Hunger<span id="rabieslabel"> / Rabies</span>:
+                    <table class="fpachart">
+                        <thead>
+                            <tr>
+                                <th>Off-Weapon IAS</th>
+                                <th>EIAS</th>
+                                <th>Frames Per Attack</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bitechartbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="intro">
+                <p>
+                    This calculator is <em>theoretically</em> correct for wereform IAS breakpoints in the second Player Test Realm for Diablo2 Resurrected 2.4, however most of its results have yet to be verified against empirical tests.
+                </p>
+                <p>
+                    <span class="heading">Key Assumptions:</span>
+                    <ul>
+                        <li>
+                            Wereforms now use the ordinary EIAS calculation.
+                        </li>
+                        <li>
+                            The EIAS cap is increased to +150 while in wereform, as stated in the patch notes.
+                        </li>
+                        <li>
+                            The rollback on Fury has been reduced from 100 to 70. (This is verified by extracting skills.txt from the PTR game data. The "40% faster" in the patch notes is wrong.) 
+                        </li>
+                        <li>
+                            Druid skills that use the regular attack animation now borrow their frame data from the applicable human form's regular attack animation. (E.g., Wereform Druids use the human Druid's frame data; Wolf-Barbs use the Barbarian's frame data; Bear-Sorcs use the Sorceress's frame data; etc.) (This is verifeid by testing.)
+                        </li>
+                        <li>
+                            It's assumed that bite attacks still use their traditional frame data because the human forms don't have a bite animation to borrow from. (This needs more testing.)
+                        </li>
+                        <li>
+                            Feral Rage retains its traditional quirk that, if it hits, the animation speed is doubled for the remainder of the animation. (This needs more testing.)
+                        </li>
+                        <li>
+                            Dual wielding behaves as described in the additional text that appears when selecting Barbarian or Assassin. (Summary: Dual wielding is useless.) (This is verified by testing.)
+                        </li>
+                    </ul>
+                    <span class="heading">TODO List:</span>
+                    <ul>
+                        <li>
+                            Empirical testing.
+                        </li>
+                        <li>
+                            Add input knobs for slowing effects.
+                        </li>
+                        <li>
+                            Expand calculator to general-purpose IAS calculator for all classes, skills, etc.
+                        </li>
+                        <li>
+                            Add action frame breakpoints.
+                        </li>
+                    </ul>
+                </p>
+            </div>
+       
+       
+    </body>
+    
+</html>
