@@ -3465,13 +3465,13 @@
                 // compute normal attack
                 CalculateSingleTable(normalattackchartbodyelement, "normalattack", playermorph, onweaponIAS, offweaponIAS, totalskillIAS, wsm, EIAScap, startframe, actionframes, framesperdirection, animationspeed);
         
-                if ((playermorph == "werewolf") || (playermorph == "werebear")){
+                if ((playerclass == "druid") && ((playermorph == "werewolf") || (playermorph == "werebear"))){
                     fireclawslabelelement.style.display = "inline";
                 }
                 else {
                     fireclawslabelelement.style.display = "none";
                 }
-                if (playermorph == "werebear"){
+                if ((playerclass == "druid") && (playermorph == "werebear")){
                     maullabelelement.style.display = "inline";
                 }
                 else {
