@@ -3261,7 +3261,7 @@
                 
                 var counter = startframe * 256;
                 var actionframecheckcounter = 0;
-                var actionframeflag = false;
+                var actionframeflag = 0;
                 var ticks = 0;
                 var maxcounter = framesperdirection * 256;
                 var increment = TruncateToInt((animationspeed * cappedeias)/100);
@@ -3282,25 +3282,23 @@
                     
                     // advance actionframecheckcounter to the current frame and see if we hit an action frame
                     while (true){
-                        actionframecheckcounter++;
                         for (var i=0; i<actionframes.length; i++){
                             if (actionframecheckcounter < actionframes[i]){
                                 break;
                             }
                             if (actionframecheckcounter == actionframes[i]){
-                                actionframeflag = true;
+                                actionframeflag = actionframes[i];
                                 break;
                             }
                         }
                         if (actionframecheckcounter >= currentframe){
                             break;
                         }
-                        
+                        actionframecheckcounter++;
                     }
                     
                     // do things if we hit an action frame
-                    if (actionframeflag){
-                        actionframeflag = false;
+                    if (actionframeflag > 0){
                         
                         // if this is a multi-hit skill and this is not the last hit, save fpa to output
                         if (    (isrollbackskill && (hitcount > 1)) ||
@@ -3322,6 +3320,9 @@
                             actionframecheckcounter = newstartframe;
                             hitcount--;
                         }
+                        
+                        actionframeflag = 0;
+                        
                     }     
                     
                 }
