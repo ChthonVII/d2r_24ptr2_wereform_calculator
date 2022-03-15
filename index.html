@@ -3262,6 +3262,7 @@
                 var counter = startframe * 256;
                 var actionframecheckcounter = 0;
                 var actionframeflag = 0;
+                var lastactionframe = -1;
                 var ticks = 0;
                 var maxcounter = framesperdirection * 256;
                 var increment = TruncateToInt((animationspeed * cappedeias)/100);
@@ -3287,7 +3288,10 @@
                                 break;
                             }
                             if (actionframecheckcounter == actionframes[i]){
-                                actionframeflag = actionframes[i];
+                                if (actionframecheckcounter != lastactionframe){
+                                    actionframeflag = actionframes[i];
+                                    lastactionframe = actionframes[i];
+                                }
                                 break;
                             }
                         }
@@ -3318,6 +3322,7 @@
                             newstartframe = TruncateToInt((currentframe * (100 - rollbackamount) ) / 100);
                             counter = newstartframe * 256;
                             actionframecheckcounter = newstartframe;
+                            lastactionframe = -1;
                             hitcount--;
                         }
                         
