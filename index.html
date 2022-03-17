@@ -87,6 +87,30 @@
                 background-color: #AAFFAA;
                 font-weight: bold;
             }
+            .tooltipwrapper{
+                position:relative;
+            }
+
+            .hastooltip .istooltip {
+                position: absolute;
+                visibility: hidden;
+            }
+
+            .hastooltip:hover .istooltip{
+                visibility: visible;
+                top:-3em;
+                left: 0;
+                z-index:1;
+                display: block;
+                min-width: 8em;
+                width: 34em;
+                min-height: 4em;
+                text-decoration: none;
+                color: black;
+                background-color: #AAAAFF;
+                border-radius: 1em;
+                padding: 1em;
+            }
         </style>
         <script  type="text/javascript" >
             
@@ -455,6 +479,22 @@
                         animationspeed: 256
                     }
                 },
+                werewolf: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 13,
+                        animationspeed: 256
+                    }
+                },
+                werebear: {
+                    wHTH: {
+                        startframe: 0,
+                        actionframes: [7],
+                        framesperdirection: 12,
+                        animationspeed: 224
+                    }
+                }
             };
             
             
@@ -3247,16 +3287,31 @@
             function CalculateFPA(skillname, morph, startframe, actionframes, framesperdirection, animationspeed, cappedeias){
                 
                 // set some variables based on the specific skill
+                var iswereform = ((morph == "werewolf") || (morph == "werebear")) ? true : false;
                 var hitcount = skilldata[skillname]["hitcount"];
                 var isrollbackskill = skilldata[skillname]["isrollbackskill"];
                 var rollbackamount = (isrollbackskill) ? skilldata[skillname]["rollbackamount"] : 100;
                 var isferalrage = (skillname == "feralrage") ? true : false;
+                
+                var humanstartframe = startframe;
+                var humanactionframes = actionframes;
+                var humanframesperdirection = framesperdirection;
+                var humananimationspeed = animationspeed;
+                var wereformnerffactor = 1;
+                
                 if (skilldata[skillname]["overrideframedata"]){
                     //alert(skilldata[skillname]["framedata"]);
                     startframe = skilldata[skillname]["framedata"][morph]["startframe"];
                     actionframes = skilldata[skillname]["framedata"][morph]["actionframes"];
                     framesperdirection = skilldata[skillname]["framedata"][morph]["framesperdirection"];
                     animationspeed = skilldata[skillname]["framedata"][morph]["animationspeed"];
+                }
+                else if (iswereform){
+                    actionframes = framedata[morph]["wHTH"]["actionframes"];
+                    framesperdirection = framedata[morph]["wHTH"]["framesperdirection"];
+                    animationspeed = framedata[morph]["wHTH"]["animationspeed"];
+                    // unknown: what do we do with startframes?
+                    wereformnerffactor = (framesperdirection * humananimationspeed)/(humanframesperdirection *animationspeed); // presumably there is some precision limit on this, but I don't know what that is so I'll let this be a float for now
                 }
                 
                 var counter = startframe * 256;
@@ -3265,7 +3320,13 @@
                 var lastactionframe = -1;
                 var ticks = 0;
                 var maxcounter = framesperdirection * 256;
+                // unknown how to properly round this -- is it correct to do all in one step like this?
+                // unknown if human animation speed is also factored in somehow
+                //if (skillname == "fury"){
+                //    alert(animationspeed + " " + humananimationspeed);
+                //}
                 var increment = TruncateToInt((animationspeed * cappedeias)/100);
+                increment = TruncateToInt(increment * wereformnerffactor);
                 var prevticks=[0];
                 var output=[];
                 
@@ -3334,6 +3395,13 @@
 
                 // save FPA for final hit to output
                 output.push(ticks - prevticks[prevticks.length -1]);
+                
+                /*
+                // removing this, as apparently it is correct without adjustment, as per mana cost tests
+                if  (document.getElementById("counttick0").checked){
+                    output[0]++;
+                }
+                */
                 
                 return output;
             }
@@ -3891,6 +3959,7 @@
     <body onload="UpdateAll();">
        <div class="pagecenter">
             <h1 class="mainheading">D2R 2.4 PTR2 Wereform IAS Calculator</h1>
+            <div style="text-align: right; margin-right: 1em;">version 1.3</div>
             <form class="mainform">
            
                     
@@ -3959,6 +4028,18 @@
                         <span><input type="number" id="nonweaponIAS" name="nonweaponIAS" value="0" min="0" oninput="RecalculateTables();">
                         (enter integer value &mdash; e.g., 25 for "25% IAS")</span>
                     </div>
+                    
+                    <!--
+                    removing this since mana cost tests show the output is correct without it
+                    <div class="spacer"></div>
+                    
+                    <div class="heading">Display</div>
+                    <div class="settings">
+                        <label for="counttick0">Count Tick0?:</label>
+                        <span><input type="checkbox" id="counttick0" name="counttick0" oninput="RecalculateTables();">
+                    <span class="tooltipwrapper">(<a href="#" class="hastooltip">what?<span class="istooltip">Should the neutral frame at the beginning of the attack animation be counted towards FPA? Traditionally, the D2 community has <em>not</em> counted this frame. But it is necessary to accurately compute attacks per second or damage per second.</span></a>)</span></span>
+                    </div>
+                    -->
 
             </form>
             <div class="spacer"></div>
@@ -4027,7 +4108,7 @@
             </div>
             <div class="intro">
                 <p>
-                    This calculator is <em>theoretically</em> correct for wereform IAS breakpoints in the second Player Test Realm for Diablo2 Resurrected 2.4, however most of its results have yet to be verified against empirical tests.
+                    This calculator is <em>theoretically</em> correct for wereform IAS breakpoints in the second Player Test Realm for Diablo2 Resurrected 2.4, however some of its results have yet to be verified against empirical tests.
                 </p>
                 <p>
                     <span class="heading">Key Assumptions:</span>
@@ -4042,13 +4123,16 @@
                             The rollback on Fury has been reduced from 100 to 70. (This is verified by extracting skills.txt from the PTR game data. The "40% faster" in the patch notes is wrong.) 
                         </li>
                         <li>
-                            Wereform skills that use the regular attack animation now borrow their frame data from the applicable human form's regular attack animation. (E.g., Wereform Druids use the human Druid's frame data; Wolf-Barbs use the Barbarian's frame data; Bear-Sorcs use the Sorceress's frame data; etc.) (This is verifeid by testing.)
+                            Wereform skills that use the regular attack animation now have a slowing factor applied based on the ratios of the applicable human form's regular attack animation's length and default speed to the wereform's regular attack animation's length and default speed. The effect of this slowing factor is to equalize the overall duration of the wereform's and human form's regular attacks. (The factor is based on the character's class, so, e.g., a bear-sorc's slowing factor is computed based on the Sorceress's normal attack.)
                         </li>
                         <li>
-                            It's assumed that bite attacks still use their traditional frame data because the human forms don't have a bite animation to borrow from. (This needs more testing.)
+                            It's <em>assumed</em> that the special starting frame values for Amazon's and  Sorceresses are not applied. (This needs more testing.)
                         </li>
                         <li>
-                            Feral Rage retains its traditional quirk that, if it hits, the animation speed is doubled for the remainder of the animation. (This needs more testing.)
+                            It's <em>assumed</em> that bite attacks do not have a slowing factor applied. (This needs more testing.)
+                        </li>
+                        <li>
+                            It's <em>assumed</em> that Feral Rage retains its traditional quirk that, if it hits, the animation speed is doubled for the remainder of the animation. (This needs more testing.)
                         </li>
                         <li>
                             Dual wielding behaves as described in the additional text that appears when selecting Barbarian or Assassin. (Summary: Dual wielding is useless.) (This is verified by testing.)
