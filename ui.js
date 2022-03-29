@@ -45,10 +45,10 @@ function CalculateSingleTable(tablebodyelement, skillname, playerclass, morph, o
             newrow.appendChild(leftcell);
             var middlecell = document.createElement('td');
             if (tempIAS == 0){
-                middlecell.innerHTML = smallesteiassamebp - 100;
+                middlecell.innerHTML = smallesteiassamebp;
             }
             else {
-                middlecell.innerHTML = eias - 100;
+                middlecell.innerHTML = eias;
             }
             newrow.appendChild(middlecell);
             var midrightcell = document.createElement('td');
@@ -123,14 +123,14 @@ function RecalculateTables(){
     var wsm = weaponlist[weapon]["wsm"];
     
     // new EIAS cap for wereforms
-    var EIAScap = 175;
+    var EIAScap = 75;
     if ((playermorph == "werewolf") || (playermorph == "werebear")){
-        EIAScap = 250;
+        EIAScap = 150;
     }
     
     // compute EIAS for display
     // (don't use this value, since it might change if the skill has a bonus/penalty)
-    var displayEIAS = ComputeEIAS(totalskillIAS, totalgearIAS, wsm, 0, 0, EIAScap) - 100;
+    var displayEIAS = ComputeEIAS(totalskillIAS, totalgearIAS, wsm, 0, 0, EIAScap);
     document.getElementById('displayeias').value = displayEIAS;
     
     // get dom elements to manipulate

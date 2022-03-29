@@ -16,6 +16,7 @@
  * Since javascript's Math.floor() rounds towards negative infinity, we need this function:
 */
 function TruncateToInt(input){
+    if (input < 0) {alert("yo!");}
     return (input >= 0) ? Math.floor(input) : Math.ceil(input);
 }
 
@@ -36,9 +37,9 @@ function TruncateToInt(input){
  * TODO: add slowing effects
 */
 function ComputeEIAS(skillias, gearias, wsm, sequencefactor, skillfactor, eiascap){
-    var output = 100 + skillias + TruncateToInt((120 * gearias)/(120 + gearias)) - wsm + sequencefactor + skillfactor;
+    var output = skillias + TruncateToInt((120 * gearias)/(120 + gearias)) - wsm + sequencefactor + skillfactor;
     output = Math.min(output, eiascap);
-    output = Math.max(output, 15);
+    output = Math.max(output, -85);
     return output;
 }
 
@@ -201,7 +202,7 @@ function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     // for now assume only A1 and A2 have a slowing factor
     // but it's possible the A1 factor is just applied to everything
     // may need to revise this once bite can be tested more
-    var adjustedanimationspeed = animationspeed;
+    var nerffactor = 1;
     if (iswereform && ((animation == "A1") || (animation == "A2"))){
         var humanstartframe = framedata[playerclass][animation]["perweaponata"][wclass]["startframe"];
         var humanactionframes = framedata[playerclass][animation]["perweaponata"][wclass]["actionframes"];
@@ -210,12 +211,8 @@ function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
         
         // compute the 2.4 wereform nerf
         // This is a best guess that matches the observed Fury data.
-        // (1) I am guessing this replaces the animationspeed term, b/c that's how the old wereform adjustment works
-        // (2) The double truncation (here and then when increment is computed) makes a difference.
-        // Both single and double truncation fail to match a few observed breakpoints.
-        // I'm hoping this is just flaws in the data, since matching both seems impossible.
-        // (3) I'm totally guessing about humanstartframe; this needs tested
-        adjustedanimationspeed = TruncateToInt((256 * framesperdirection * humananimationspeed)/((humanframesperdirection - humanstartframe) * animationspeed));
+        // Left as a float b/c its terms are likely inside the calculation where it's applied 
+         nerffactor = (framesperdirection * humananimationspeed)/((humanframesperdirection - humanstartframe) * animationspeed);
     }
     
     // set some variables based on the specific skill
@@ -230,7 +227,9 @@ function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     var lastactionframe = -1;
     var ticks = (skilldata[skillname]["issequence"]) ? 1 : 0;  // sequence skills don't skip tick0 like everything else does
     var maxcounter = framesperdirection * 256;
-    var increment = TruncateToInt((adjustedanimationspeed * cappedeias)/100);
+    var increment = TruncateToInt((animationspeed * cappedeias)/100);
+    increment += animationspeed;
+    increment = TruncateToInt(increment * nerffactor);
     var prevticks=[0];
     var output_fpa=[];
     var output_actionframes=[];
