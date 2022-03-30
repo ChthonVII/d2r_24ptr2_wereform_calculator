@@ -12,7 +12,7 @@ function CalculateSingleTable(tablebodyelement, skillname, playerclass, morph, o
     var maxFPA = CalculateFPA(skillname, playerclass, morph, wclass, maxEIAS);
     
     // Find the smallest EIAS value that gives the same breakpoint at zero off-weapon IAS.
-    var smallesteiassamebp = 15;
+    var smallesteiassamebp = -85;
     var eiasatzero = ComputeEIAS(totalskillIAS, onweaponIAS, wsm, sequencefactor, skillfactor, EIAScap);
     var currentbp = CalculateFPA(skillname, playerclass, morph, wclass, eiasatzero);
     while (smallesteiassamebp <= eiasatzero){
