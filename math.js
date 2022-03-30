@@ -173,6 +173,16 @@ function DiminishingReturnsLimitReached(x){
  * This is very likely wrong as a faithful reproduction of what's going on inside D2,
  * but it produces results that match the empircal tests.
  * (And since Feral Rage lost this behavior, it's kind of a moot point anyway.)
+ * 
+ * 
+ *  And here's the bit that eluded me for so long:
+ * Traditionally the D2 community has calculated the increment as floor((animationspeed * (100 + EIAS))/100)
+ * But that's no longer exactly right.
+ * It's really animationspeed + TruncateToInt((animationspeed * EAIS)/100)
+ * I suspect what happened is that D2's original compiler implemented truncate as "round towards minus infinity,"
+ * So it was kosher to optimize that by moving the additive term inside.
+ * But a modern compiler treats truncate as "round towards zero,"
+ * so that optimization is allowed anymore.
 */
 function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     
@@ -203,16 +213,22 @@ function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     // but it's possible the A1 factor is just applied to everything
     // may need to revise this once bite can be tested more
     var nerffactor = 1;
-    if (iswereform && ((animation == "A1") || (animation == "A2"))){
-        var humanstartframe = framedata[playerclass][animation]["perweaponata"][wclass]["startframe"];
-        var humanactionframes = framedata[playerclass][animation]["perweaponata"][wclass]["actionframes"];
-        var humanframesperdirection = framedata[playerclass][animation]["perweaponata"][wclass]["framesperdirection"];
-        var humananimationspeed = framedata[playerclass][animation]["perweaponata"][wclass]["animationspeed"];
+    if (iswereform /*&& ((animation == "A1") || (animation == "A2"))*/){
+        var wereformframesperdirection = framedata[avatar]["A1"]["perweaponata"][wclasstouse]["framesperdirection"];
+        var wereformanimationspeed = framedata[avatar]["A1"]["perweaponata"][wclasstouse]["animationspeed"];
+        
+        var humanstartframe = framedata[playerclass]["A1"]["perweaponata"][wclass]["startframe"];
+        var humanactionframes = framedata[playerclass]["A1"]["perweaponata"][wclass]["actionframes"];
+        var humanframesperdirection = framedata[playerclass]["A1"]["perweaponata"][wclass]["framesperdirection"];
+        var humananimationspeed = framedata[playerclass]["A1"]["perweaponata"][wclass]["animationspeed"];
         
         // compute the 2.4 wereform nerf
         // This is a best guess that matches the observed Fury data.
         // Left as a float b/c its terms are likely inside the calculation where it's applied 
-         nerffactor = (framesperdirection * humananimationspeed)/((humanframesperdirection - humanstartframe) * animationspeed);
+         nerffactor = (wereformframesperdirection * humananimationspeed)/((humanframesperdirection - humanstartframe) * wereformanimationspeed);
+         // Bite attacks are overriding to 256?
+         animationspeed = wereformanimationspeed;
+         //animationspeed = TruncateToInt(wereformanimationspeed * nerffactor);
     }
     
     // set some variables based on the specific skill
