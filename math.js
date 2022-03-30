@@ -16,7 +16,7 @@
  * Since javascript's Math.floor() rounds towards negative infinity, we need this function:
 */
 function TruncateToInt(input){
-    if (input < 0) {alert("yo!");}
+    //if (input < 0) {alert("yo!");}
     return (input >= 0) ? Math.floor(input) : Math.ceil(input);
 }
 
