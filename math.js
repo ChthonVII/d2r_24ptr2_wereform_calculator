@@ -183,6 +183,7 @@ function DiminishingReturnsLimitReached(x){
  * So it was kosher to optimize that by moving the additive term inside.
  * But a modern compiler treats truncate as "round towards zero,"
  * so that optimization is allowed anymore.
+ * Also, the order of operations matters. The nerf factor is applied last.
 */
 function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     
@@ -208,27 +209,26 @@ function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     var framesperdirection = framedata[avatar][animation]["perweaponata"][wclasstouse]["framesperdirection"];
     var animationspeed = framedata[avatar][animation]["perweaponata"][wclasstouse]["animationspeed"];
     
-    // if we are a werform, pull the human form frame data too. 
-    // for now assume only A1 and A2 have a slowing factor
-    // but it's possible the A1 factor is just applied to everything
-    // may need to revise this once bite can be tested more
-    var nerffactor = 1;
-    if (iswereform /*&& ((animation == "A1") || (animation == "A2"))*/){
-        var wereformframesperdirection = framedata[avatar]["A1"]["perweaponata"][wclasstouse]["framesperdirection"];
-        var wereformanimationspeed = framedata[avatar]["A1"]["perweaponata"][wclasstouse]["animationspeed"];
+    // In 2.4PTR2 the following nerf is applied to wereforms:
+    // animationspeed is replaced with human A1 weapon-specific animationspeed
+    // startframe is replaced with human A1 weapon-specific startframe
+    // (Actually not sure if source for animationspeed and startframe it's hardcoded as A1 or not,
+    // since non-druid classes don't have access to anything that doesn't use A1.)
+    // After it's computed (and truncated to int) the increment value is multipled by
+    // the wereform's A1 HTH framesperdirection, and divided by
+    // the human form's A1 weapon-specific framesperdirection,
+    // and truncated to int again.
+    // (The A1 values are used here even on S3 (and presumably A2) skills.)
+    var wereform_A1_framesperdirection;
+    var human_A1_framesperdirection;
+    if (iswereform){
+        wereform_A1_framesperdirection = framedata[avatar]["A1"]["perweaponata"][wclasstouse]["framesperdirection"];
+        human_A1_framesperdirection = framedata[playerclass]["A1"]["perweaponata"][wclass]["framesperdirection"];
         
-        var humanstartframe = framedata[playerclass]["A1"]["perweaponata"][wclass]["startframe"];
-        var humanactionframes = framedata[playerclass]["A1"]["perweaponata"][wclass]["actionframes"];
-        var humanframesperdirection = framedata[playerclass]["A1"]["perweaponata"][wclass]["framesperdirection"];
-        var humananimationspeed = framedata[playerclass]["A1"]["perweaponata"][wclass]["animationspeed"];
-        
-        // compute the 2.4 wereform nerf
-        // This is a best guess that matches the observed Fury data.
-        // Left as a float b/c its terms are likely inside the calculation where it's applied 
-         nerffactor = (wereformframesperdirection * humananimationspeed)/((humanframesperdirection - humanstartframe) * wereformanimationspeed);
-         // Bite attacks are overriding to 256?
-         animationspeed = wereformanimationspeed;
-         //animationspeed = TruncateToInt(wereformanimationspeed * nerffactor);
+        var human_A1_startframe = framedata[playerclass]["A1"]["perweaponata"][wclass]["startframe"];
+        var human_A1_animationspeed = framedata[playerclass]["A1"]["perweaponata"][wclass]["animationspeed"];
+         animationspeed = human_A1_animationspeed;
+         startframe = human_A1_startframe;
     }
     
     // set some variables based on the specific skill
@@ -245,7 +245,9 @@ function CalculateFPA(skillname, playerclass, morph, wclass, cappedeias){
     var maxcounter = framesperdirection * 256;
     var increment = TruncateToInt((animationspeed * cappedeias)/100);
     increment += animationspeed;
-    increment = TruncateToInt(increment * nerffactor);
+    if (iswereform){
+        increment = TruncateToInt((increment * wereform_A1_framesperdirection)/human_A1_framesperdirection);
+    }
     var prevticks=[0];
     var output_fpa=[];
     var output_actionframes=[];
